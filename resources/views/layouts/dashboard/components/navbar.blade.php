@@ -16,7 +16,7 @@
                     <span class="text-dark fw-bold">{{ Auth::user()->full_name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1"
+                    <a class="dropdown-item" href="{{route('profiles.index')}}"><i class="align-middle me-1"
                             data-feather="user"></i> Mi perfil</a>
                     <div class="dropdown-divider"></div>
                     <form action="{{ route('logout') }}" method="post" id="logout-formNavbar">

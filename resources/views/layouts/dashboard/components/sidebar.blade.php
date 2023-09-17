@@ -1,6 +1,6 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
-        <a class="sidebar-brand d-flex justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex justify-content-center" href="{{URL::to('/')}}">
            <img src="https://appcore.trymyride.co/images/tmr-logo.svg" alt="" class="w-75">
         </a>
 
@@ -16,7 +16,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="pages-profile.html">
+                <a class="sidebar-link" href="{{route('maps.index')}}">
                     <span class="iconify" data-icon="solar:map-point-wave-bold-duotone" data-width="25"></span>  <span class="align-middle">Mapas</span>
                 </a>
             </li>
@@ -26,7 +26,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="pages-sign-in.html">
+                <a class="sidebar-link" href="{{route('profiles.index')}}">
                     <span class="iconify" data-icon="solar:user-bold-duotone" data-width="25"></span> <span class="align-middle">Mi perfil</span>
                 </a>
             </li>

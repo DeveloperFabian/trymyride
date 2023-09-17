@@ -9,11 +9,15 @@ class Map extends Model
 {
     use HasFactory;
 
-    protected $table = 'states';
+    protected $table = 'maps';
 
     protected $fillable = [
         'name',
-        'description',
-        'location'
+        'description'
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

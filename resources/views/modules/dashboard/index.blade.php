@@ -95,7 +95,7 @@
                 <div class="card-img-overlay">
                     <h1 class="text-white fw-bold">OpenStreetMap</h1>
                     <p class="card-text">Aplicación de búsqueda de lugares que permitirá a los usuarios buscar ubicaciones y mostrar puntos de interés cercanos a esa ubicación en un mapa de OpenStreetMap</p>
-                    <a href=""></a>
+                    <a href="{{route('maps.index')}}" class="btn btn-success bg-gradient">Ir al módulo</a>
                 </div>
             </div>
         </div>
