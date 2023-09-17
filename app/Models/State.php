@@ -19,4 +19,9 @@ class State extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function user_mobiles()
+    {
+        return $this->hasMany(UserMobile::class);
+    }
 }
