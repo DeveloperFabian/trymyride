@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +20,8 @@ Route::get('/', function () {
         return redirect('/home');
     }
     return view('modules.auth.login');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [DashboardController::class, 'index'])->name('home');
 });
