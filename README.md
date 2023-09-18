@@ -2,7 +2,7 @@
 
 Prueba Tecnica
 
-## Requisitos Previos (Con Docker)
+## Requisitos Previos e Instalación (Con Docker)
 
 Asegúrate de tener instalados los siguientes requisitos previos antes de comenzar:
 
@@ -11,7 +11,8 @@ Asegúrate de tener instalados los siguientes requisitos previos antes de comenz
 * Distribucion Ubuntu (Instalado desde Microsoft Store, en caso de estar en Windows)
 * Crear el contenedor con los siguientes archivos:
     1. docker-compose.yml:
-        ```version: '3'
+        ```
+            version: '3'
             services:
               php:
                 build:
@@ -33,7 +34,8 @@ Asegúrate de tener instalados los siguientes requisitos previos antes de comenz
                   - PMA_HOST=host.docker.internal
 
     2. Dockerfile:
-          ```FROM php:apache
+          ```
+              FROM php:apache
 
               RUN apt-get update && \
 
@@ -69,30 +71,54 @@ Asegúrate de tener instalados los siguientes requisitos previos antes de comenz
               EXPOSE 80
 
               CMD ["apache2-foreground"]
-
-* Ingresar al contenedor con: "**docker exec -it ID_DEL_CONTENEDOR bash"
+* Crear una base de datos en MySQL llamada "**trymyride**"
+* Ingresar al contenedor con: "**docker exec -it ID_DEL_CONTENEDOR bash**"
 * Clonar el proyecto en "**/var/www/html**" con el comando: "**git clone https://github.com/DeveloperFabian/trymyride.git .**"
 * Configurar el archivo de entorno "**.env**" con: "**DB_HOST=host.docker.internal**"
 * Ejecutar los siguientes comandos:
-  ``` composer udpate --prefer-dist --optimize-autoloader
+  ```
+      composer udpate --prefer-dist --optimize-autoloader
       php artisan key:generate --ansi
       php artisan storage:link
+      php artisan migrate:fresh --seed
+      npm install
+      npm run dev
+      chmod -R 777 vendor
+      chmod -R 777 bootstrap
+      chmod -R storage
+      php artisan optimize:clear
+
+## Requisitos Previos e Instalación (Sin Docker)
+
+Asegúrate de tener instalados los siguientes requisitos previos antes de comenzar:
+
+* Xampp o Laragon
+* PHP 8.2
+* Ultima version de NodeJS
+* Ultima version npm
+* MySQL 8.0
+* Ultima version Composer
+---
+* Crear una base de datos en MySQL llamada "**trymyride**"
+* Clonar el proyecto: "**git clone https://github.com/DeveloperFabian/trymyride.git .**"
+* Ejecutar los siguientes comandos:
+  ```
+      composer udpate --prefer-dist --optimize-autoloader
+      php artisan key:generate --ansi
+      php artisan storage:link
+      php artisan migrate:fresh --seed
       npm install
       npm run dev
       php artisan optimize:clear
+      php artisan serve
 
 ## Tecnologías Utilizadas
 
-* React Native
-* React Navigation v6
-* Expo
+* Laravel
+* Spatie Permissions
+* Spatie Media
+* Laravel Fortify
+* Laravel Lang
 * Axios
-* Native Base
-* Iconify
-
-## Instalación
-
-1. Clonar el proyecto: " **git clone https://github.com/DeveloperFabian/trymyride-movil.git .** "
-2. Ir a la siguiente ruta: " **app\components\api\Config.js** " y remplazar por la IP local de tu computador
-3. Ejecutar el comando: " **yarn install** "
-4. Iniciar el aplicativo con: " **npx expo start --clear** "
+* Vite
+* NodeJS
