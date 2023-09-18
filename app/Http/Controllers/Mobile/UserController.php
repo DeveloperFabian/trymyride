@@ -71,6 +71,43 @@ class UserController extends Controller
         ]);
     }
 
+    public function account()
+    {
+        $user = Auth::guard('sanctum')->user();
+
+        if ($user) {
+            return response()->json([
+                'user' => $user
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Usuario no autenticado',
+            ], 401);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::guard('sanctum')->user();
+
+        if ($user) {
+            $user->update([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password'))
+            ]);
+
+            return response()->json([
+                'user' => $user,
+                'message' => 'Datos del usuario actualizados correctamente',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Usuario no autenticado',
+            ], 401);
+        }
+    }
+
     public function logout()
     {
         $user = Auth::guard('sanctum')->user();
