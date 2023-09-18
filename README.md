@@ -1,66 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Try My Ride Web
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Prueba Tecnica
 
-## About Laravel
+## Requisitos Previos (Con Docker)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Asegúrate de tener instalados los siguientes requisitos previos antes de comenzar:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Docker Desktop
+* WSL 2 (Virtual Machine)
+* Distribucion Ubuntu (Instalado desde Microsoft Store, en caso de estar en Windows)
+* Crear el contenedor con los siguientes archivos:
+    1. docker-compose.yml:
+        ```version: '3'
+            services:
+              php:
+                build:
+                  context: .
+                  dockerfile: Dockerfile
+                ports:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+                  - 8000:80
+              phpmyadmin:
+                image: phpmyadmin
+                ports:
 
-## Learning Laravel
+                  - 8080:80
+                depends_on:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+                  - php
+                environment:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+                  - PMA_HOST=host.docker.internal
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    2. Dockerfile:
+          ```FROM php:apache
 
-## Laravel Sponsors
+              RUN apt-get update && \
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+                  apt-get install -y zlib1g-dev libzip-dev \
+                  git \
+                  zip \
+                  libonig-dev \
+                  libxml2-dev \
+                  libgd3 \
+                  libgd-dev \
+                  curl \
+                  nano
 
-### Premium Partners
+              RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath opcache gd zip mysqli
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+              RUN a2enmod rewrite
 
-## Contributing
+              RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php'); " && \
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+                  php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+                  php -r "unlink('composer-setup.php');"
 
-## Code of Conduct
+              RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+              RUN apt-get install -y cron
 
-## Security Vulnerabilities
+              RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf && \
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+                  sed -i 's|AllowOverride None|AllowOverride All|' /etc/apache2/apache2.conf
 
-## License
+              WORKDIR /var/www/html
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+              EXPOSE 80
+
+              CMD ["apache2-foreground"]
+
+* Ingresar al contenedor con: "**docker exec -it ID_DEL_CONTENEDOR bash"
+* Clonar el proyecto en "**/var/www/html**" con el comando: "**git clone https://github.com/DeveloperFabian/trymyride.git .**"
+* Configurar el archivo de entorno "**.env**" con: "**DB_HOST=host.docker.internal**"
+* Ejecutar los siguientes comandos:
+  ``` composer udpate --prefer-dist --optimize-autoloader
+      php artisan key:generate --ansi
+      php artisan storage:link
+      npm install
+      npm run dev
+      php artisan optimize:clear
+
+## Tecnologías Utilizadas
+
+* React Native
+* React Navigation v6
+* Expo
+* Axios
+* Native Base
+* Iconify
+
+## Instalación
+
+1. Clonar el proyecto: " **git clone https://github.com/DeveloperFabian/trymyride-movil.git .** "
+2. Ir a la siguiente ruta: " **app\components\api\Config.js** " y remplazar por la IP local de tu computador
+3. Ejecutar el comando: " **yarn install** "
+4. Iniciar el aplicativo con: " **npx expo start --clear** "
